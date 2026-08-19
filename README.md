@@ -48,8 +48,7 @@ http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&r
 
 ## 既知の制限
 
-- メモリ API。再起動で求人はシードし直す
-- OIDC は未接続（P01 ルートは後続）
 - 検索は API 内の部分一致
 - P05 未起動時、書類通過後の枠は「カレンダー未接続」（503）。枠計算はカレンダー UI をコピーしない
-- K8s overlay C: `talent.localhost` が web、`talent-api.localhost` が API。メモリのまま（platform Postgres 未使用）
+- OIDC は未接続（P01 ルートは後続）。Compose は `?user=` のまま
+- K8s overlay C: `talent.localhost` が web、`talent-api.localhost` が API。API は platform Postgres の `talent` DB
