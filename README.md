@@ -44,6 +44,8 @@ API が落ちていても web プロセスは起動する。検索画面に「ta
 
 認可は API の `X-Dev-User-Sub`。画面の非表示だけでは足りない。
 
+http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&role=employer` で求人と応募者。
+
 ## 既知の制限
 
 - メモリ API。再起動で求人はシードし直す
