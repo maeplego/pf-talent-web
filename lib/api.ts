@@ -1,4 +1,6 @@
 import type { DevSession } from "./session";
+import { oidcEnabled } from "./oidc/env";
+import { readCookie } from "./oidc/cookies";
 
 export class TalentApiError extends Error {
   constructor(
@@ -17,11 +19,20 @@ export type TalentResult<T> = { ok: true; data: T } | { ok: false; error: string
 
 export async function talentFetch<T>(path: string, session: DevSession, init?: RequestInit): Promise<TalentResult<T>> {
   try {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "X-Dev-User-Sub": session.sub,
+    };
+    if (oidcEnabled()) {
+      const access = await readCookie("rp_access");
+      if (access) {
+        headers.Authorization = `Bearer ${access}`;
+      }
+    }
     const res = await fetch(`${talentApiBase()}${path}`, {
       ...init,
       headers: {
-        "Content-Type": "application/json",
-        "X-Dev-User-Sub": session.sub,
+        ...headers,
         ...(init?.headers ?? {}),
       },
       cache: "no-store",

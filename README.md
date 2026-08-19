@@ -42,7 +42,7 @@ API が落ちていても web プロセスは起動する。検索画面に「ta
 | `?user=candidate-1` | candidate |
 | `?user=employer-1&role=employer` | employer |
 
-認可は API の `X-Dev-User-Sub`。画面の非表示だけでは足りない。
+認可は API の `X-Dev-User-Sub`（Compose / overlay smoke）と、overlay では任意の Bearer。画面の非表示だけでは足りない。
 
 http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&role=employer` で求人と応募者。
 
@@ -50,5 +50,5 @@ http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&r
 
 - 検索は API 内の部分一致
 - P05 未起動時、書類通過後の枠は「カレンダー未接続」（503）。枠計算はカレンダー UI をコピーしない
-- OIDC は未接続（P01 ルートは後続）。Compose は `?user=` のまま
-- K8s overlay C: `talent.localhost` が web、`talent-api.localhost` が API。API は platform Postgres の `talent` DB
+- OIDC は Compose では任意。overlay C の web は IdP ログイン必須。acting user はログイン後も `?user=`
+- K8s overlay C: `talent.localhost` が web、`talent-api.localhost` が API。API は platform Postgres の `talent` DB。cluster-smoke は `TALENT_DEV_AUTH=true` の `X-Dev-User-Sub` / 未認証 JSON を使う

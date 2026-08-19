@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { DevSession } from "../lib/session";
 import { sessionQuery } from "../lib/session";
+import { oidcEnabled } from "../lib/oidc/env";
 
 export function AppShell({
   session,
@@ -42,6 +43,14 @@ export function AppShell({
           <Link href={`/${sessionQuery({ sub: "employer-1", role: "employer" })}`}>employer-1</Link>
           {" · "}
           <Link href={`/${sessionQuery({ sub: "employer-2", role: "employer" })}`}>employer-2</Link>
+          {oidcEnabled() ? (
+            <>
+              {" · "}
+              <form action="/logout" method="post" style={{ display: "inline" }}>
+                <button type="submit">ログアウト</button>
+              </form>
+            </>
+          ) : null}
         </p>
       </header>
       {children}
@@ -54,6 +63,12 @@ export function LoginGate() {
     <main>
       <h1>開発ユーザーを選ぶ</h1>
       <p>未ログインのゲスト画面は出さない。開発時は <code>?user=</code> が必須です。</p>
+      {oidcEnabled() ? (
+        <p>
+          overlay では先に IdP ログインします（<a href="/login">/login</a>）。ログイン後も学習用の acting user は{" "}
+          <code>?user=</code> です。
+        </p>
+      ) : null}
       <ul>
         <li>
           <Link href="/?user=candidate-1&role=candidate">candidate-1（候補者）</Link>

@@ -29,6 +29,16 @@ spec:
               value: http://api.p10.svc.cluster.local:8090
             - name: CALENDAR_PUBLIC_WEB_URL
               value: http://calendar.localhost
+            - name: OIDC_ISSUER
+              value: http://idp.localhost
+            - name: OIDC_INTERNAL_BASE
+              value: http://idp.p01.svc.cluster.local:8080
+            - name: OIDC_CLIENT_ID
+              value: pf-talent-web
+            - name: OIDC_REDIRECT_URI
+              value: http://talent.localhost/callback
+            - name: OIDC_POST_LOGOUT_REDIRECT_URI
+              value: http://talent.localhost/logged-out
           readinessProbe:
             httpGet:
               path: /ready
