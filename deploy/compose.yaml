@@ -1,0 +1,10 @@
+services:
+  talent-web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      TALENT_API_URL: ${TALENT_API_URL:-http://host.docker.internal:8090}
+      PORT: "3010"
+    ports:
+      - "3010:3010"
