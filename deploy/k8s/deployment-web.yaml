@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: talent-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: talent-web
+  template:
+    metadata:
+      labels:
+        app: talent-web
+    spec:
+      containers:
+        - name: web
+          image: pf-talent-web:latest
+          ports:
+            - containerPort: 3010
+          env:
+            - name: PORT
+              value: "3010"
+            - name: TALENT_API_URL
+              value: http://api.p10.svc.cluster.local:8090
+            - name: CALENDAR_PUBLIC_WEB_URL
+              value: http://calendar.localhost
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3010
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3010
+            initialDelaySeconds: 20
+            periodSeconds: 10
