@@ -52,3 +52,4 @@ http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&r
 - OIDC は未接続（P01 ルートは後続）
 - 検索は API 内の部分一致
 - K8s overlay は別スライス
+- P05 未起動時、書類通過後の枠は「カレンダー未接続」（503）。枠計算はカレンダー UI をコピーしない

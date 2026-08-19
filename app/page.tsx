@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
 
+import { saveSearch } from "../actions";
 import { AppShell, LoginGate } from "../components/AppShell";
 import { buildJobsQuery, talentFetch } from "../lib/api";
 import { parseDevSession, sessionQuery } from "../lib/session";
@@ -96,6 +97,21 @@ export default async function SearchPage({
             年収上限 <input name="salaryMax" defaultValue={filters.salaryMax ?? ""} inputMode="numeric" />
           </label>
           <button type="submit">検索</button>
+        </form>
+        <form action={saveSearch} style={{ marginBottom: "1.5rem" }}>
+          <input type="hidden" name="user" value={session.sub} />
+          <input type="hidden" name="role" value={session.role} />
+          <input type="hidden" name="q" value={filters.q ?? ""} />
+          <input type="hidden" name="employmentType" value={filters.employmentType ?? ""} />
+          <input type="hidden" name="remote" value={filters.remote ?? ""} />
+          <input type="hidden" name="skills" value={filters.skills ?? ""} />
+          <input type="hidden" name="salaryMin" value={filters.salaryMin ?? ""} />
+          <input type="hidden" name="salaryMax" value={filters.salaryMax ?? ""} />
+          <label>
+            この条件を保存{" "}
+            <input name="name" required placeholder="名前" />
+          </label>{" "}
+          <button type="submit">保存検索にする</button>
         </form>
 
         {error ? (

@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     environment:
       TALENT_API_URL: ${TALENT_API_URL:-http://host.docker.internal:8090}
+      CALENDAR_PUBLIC_WEB_URL: ${CALENDAR_PUBLIC_WEB_URL:-http://localhost:3005}
       PORT: "3010"
     ports:
       - "3010:3010"

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
 
 import { AppShell, LoginGate } from "../../components/AppShell";
+import { InterviewSlots } from "../../components/InterviewSlots";
 import { talentFetch } from "../../lib/api";
 import { parseDevSession, sessionQuery } from "../../lib/session";
 import type { Application, Job } from "../../lib/types";
@@ -54,6 +55,9 @@ export default async function MyApplicationsPage({
                 </Link>
                 {" — "}
                 ステータス <code>{row.status}</code>
+                {(row.status === "document_passed" || row.status === "interview") ? (
+                  <InterviewSlots applicationId={row.id} session={session} />
+                ) : null}
                 <div style={{ fontSize: "0.85rem", color: "#555" }}>履歴書スナップショット（先頭）: {row.resumeSnapshot.slice(0, 80)}</div>
               </li>
             ))}

@@ -117,3 +117,46 @@ export async function patchApplicationStatus(formData: FormData) {
   }
   redirect(`/employer/jobs/${jobId}/applications${sessionQuery(session)}`);
 }
+
+export async function saveSearch(formData: FormData) {
+  const session = sessionFromForm(formData);
+  if (!session) redirect("/");
+  const skills = String(formData.get("skills") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const salaryMinRaw = String(formData.get("salaryMin") ?? "").trim();
+  const salaryMaxRaw = String(formData.get("salaryMax") ?? "").trim();
+  const employmentType = String(formData.get("employmentType") ?? "").trim();
+  const remoteRaw = String(formData.get("remote") ?? "").trim();
+  const result = await talentFetch(`/v1/saved-searches`, session, {
+    method: "POST",
+    body: JSON.stringify({
+      candidateSub: session.sub,
+      name: String(formData.get("name") ?? "").trim() || "未命名",
+      query: String(formData.get("q") ?? ""),
+      employmentType: employmentType || undefined,
+      remote: remoteRaw === "true" ? true : remoteRaw === "false" ? false : undefined,
+      skills,
+      salaryMin: salaryMinRaw ? Number(salaryMinRaw) : undefined,
+      salaryMax: salaryMaxRaw ? Number(salaryMaxRaw) : undefined,
+    }),
+  });
+  if (!result.ok) {
+    fail("/me/saved-searches", session, result.error);
+  }
+  redirect(`/me/saved-searches${sessionQuery(session)}`);
+}
+
+export async function runSavedSearch(formData: FormData) {
+  const session = sessionFromForm(formData);
+  if (!session) redirect("/");
+  const id = String(formData.get("savedSearchId") ?? "");
+  const result = await talentFetch<{ matchedCount: number }>(`/v1/saved-searches/${id}/run`, session, {
+    method: "POST",
+  });
+  if (!result.ok) {
+    fail("/me/saved-searches", session, result.error);
+  }
+  redirect(`/me/saved-searches${sessionQuery(session, { ran: String(result.data.matchedCount) })}`);
+}

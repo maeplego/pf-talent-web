@@ -67,3 +67,11 @@ export type Report = {
   status: "open" | "reviewed";
   createdAt: string;
 };
+
+export type InterviewSlotsPayload = {
+  slug: string;
+  name: string;
+  durationMinutes: number;
+  hostTimeZone: string;
+  starts: string[];
+};
