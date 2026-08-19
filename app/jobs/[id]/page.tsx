@@ -2,11 +2,11 @@ import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
-import { applyToJob, reportJob } from "../../actions";
-import { AppShell, LoginGate } from "../../components/AppShell";
-import { talentFetch } from "../../lib/api";
-import { parseDevSession, sessionQuery } from "../../lib/session";
-import type { Job, SimilarJobs } from "../../lib/types";
+import { applyToJob, reportJob } from "@/app/actions";
+import { AppShell, LoginGate } from "@/components/AppShell";
+import { talentFetch } from "@/lib/api";
+import { parseDevSession, sessionQuery } from "@/lib/session";
+import type { Job, SimilarJobs } from "@/lib/types";
 
 function salaryLabel(job: Job): string {
   if (job.salaryMin === null && job.salaryMax === null) {

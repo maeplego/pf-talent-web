@@ -1,10 +1,10 @@
 import { unstable_noStore as noStore } from "next/cache";
 
-import { saveProfile } from "../../actions";
-import { AppShell, LoginGate } from "../../components/AppShell";
-import { talentFetch } from "../../lib/api";
-import { parseDevSession } from "../../lib/session";
-import type { CandidateProfile } from "../../lib/types";
+import { saveProfile } from "@/app/actions";
+import { AppShell, LoginGate } from "@/components/AppShell";
+import { talentFetch } from "@/lib/api";
+import { parseDevSession } from "@/lib/session";
+import type { CandidateProfile } from "@/lib/types";
 
 export default async function ProfilePage({
   searchParams,

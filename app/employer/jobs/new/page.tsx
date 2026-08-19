@@ -1,8 +1,8 @@
 import { unstable_noStore as noStore } from "next/cache";
 
-import { createJob } from "../../../actions";
-import { AppShell, LoginGate } from "../../../components/AppShell";
-import { parseDevSession } from "../../../lib/session";
+import { createJob } from "@/app/actions";
+import { AppShell, LoginGate } from "@/components/AppShell";
+import { parseDevSession } from "@/lib/session";
 
 export default async function NewJobPage({
   searchParams,

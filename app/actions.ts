@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 
-import { talentFetch } from "./lib/api";
-import { parseDevSession, sessionQuery } from "./lib/session";
+import { talentFetch } from "@/lib/api";
+import { parseDevSession, sessionQuery } from "@/lib/session";
 
 function sessionFromForm(formData: FormData) {
   return parseDevSession({
@@ -12,7 +12,7 @@ function sessionFromForm(formData: FormData) {
   });
 }
 
-function fail(path: string, session: NonNullable<ReturnType<typeof parseDevSession>>, error: string) {
+function fail(path: string, session: NonNullable<ReturnType<typeof parseDevSession>>, error: string): never {
   redirect(`${path}${sessionQuery(session, { error })}`);
 }
 

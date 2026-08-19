@@ -17,11 +17,14 @@ spec:
       containers:
         - name: web
           image: pf-talent-web:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3010
           env:
             - name: PORT
               value: "3010"
+            - name: HOSTNAME
+              value: "0.0.0.0"
             - name: TALENT_API_URL
               value: http://api.p10.svc.cluster.local:8090
             - name: CALENDAR_PUBLIC_WEB_URL
