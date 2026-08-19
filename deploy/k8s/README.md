@@ -1,10 +1,6 @@
-# P10 talent-web Kubernetes manifests
+# Kubernetes マニフェスト（P10 Web）
 
-Deployment / Service（ポート 3010）。API は cluster 内 `http://api.p10.svc.cluster.local:8090`。
+ポート 3010 の画面です。API はクラスタ内 `http://api.p10.svc.cluster.local:8090` です。このフォルダだけを apply しないでください。起動は [pf-cloud-k8s](https://github.com/maeplego/pf-cloud-k8s) からです。
 
-Ingress は `pf-cloud-k8s`:
-
-- `talent.localhost` → web
-- `talent-api.localhost` → api
-
-メモリ API のまま。platform Postgres へは移行しない。
+- `talent.localhost` → Web
+- `talent-api.localhost` → API

@@ -1,12 +1,10 @@
 # pf-talent-web
 
-P10 求人マッチングの候補者 / 企業 UI（学習用）。Next.js App Router。本番 IdP の置き換えではない。
+学習用の求人マッチング UI です。候補者の検索・応募と、企業の求人・応募者一覧があります。年収は整数です。応募メールは送りません。**本番の採用サイトの置き換えではありません。**
 
-検索は API の部分一致。OpenSearch / Postgres FTS のふりはしない。年収は整数。応募メールは出さない。
+API は [pf-talent-api](https://github.com/maeplego/pf-talent-api) です。先に API を起動してください。
 
-## 起動（2 コマンド）
-
-API を先に上げる。
+## 起動
 
 ```powershell
 cd pf-talent-api/deploy
@@ -21,9 +19,9 @@ docker compose up -d --build
 ```
 
 - Web: http://localhost:3010/?user=candidate-1
-- API: http://localhost:8090/health（Compose 内の web は `http://host.docker.internal:8090` を呼ぶ）
+- API: http://localhost:8090/health
 
-ローカル開発:
+ホスト開発:
 
 ```powershell
 npm install
@@ -31,24 +29,15 @@ $env:TALENT_API_URL="http://localhost:8090"
 npm run dev
 ```
 
-API が落ちていても web プロセスは起動する。検索画面に「talent API に接続できません」と出す。
+API が落ちていても Web プロセスは起動し、検索画面に接続できない旨を出します。
 
-## 開発ユーザー
+## ユーザー
 
-ゲスト相当は出さない。`?user=` が無いと選択画面になる。
+`?user=` が無いと選択画面になります。ゲスト相当はありません。
 
-| 例 | ロール |
+| 例 | 役割 |
 | --- | --- |
-| `?user=candidate-1` | candidate |
-| `?user=employer-1&role=employer` | employer |
+| `?user=candidate-1` | 候補者 |
+| `?user=employer-1&role=employer` | 企業 |
 
-認可は API の `X-Dev-User-Sub`（Compose / overlay smoke）と、overlay では任意の Bearer。画面の非表示だけでは足りない。
-
-http://localhost:3010/?user=candidate-1 で検索→応募。`?user=employer-1&role=employer` で求人と応募者。
-
-## 既知の制限
-
-- 検索は API 内の部分一致
-- P05 未起動時、書類通過後の枠は「カレンダー未接続」（503）。枠計算はカレンダー UI をコピーしない
-- OIDC は Compose では任意。overlay C の web は IdP ログイン必須。acting user はログイン後も `?user=`
-- K8s overlay C: `talent.localhost` が web、`talent-api.localhost` が API。API は platform Postgres の `talent` DB。cluster-smoke は `TALENT_DEV_AUTH=true` の `X-Dev-User-Sub` / 未認証 JSON を使う
+認可は API の開発ヘッダです。画面の非表示だけでは足りません。カレンダー未起動時、書類通過後の枠は「カレンダー未接続」になります。枠計算はカレンダー UI をコピーしません。
