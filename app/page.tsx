@@ -60,9 +60,12 @@ export default async function SearchPage({
 
   return (
     <AppShell session={session}>
-      <main>
-        <h1>求人検索</h1>
-        <form method="get" style={{ display: "grid", gap: "0.5rem", marginBottom: "1.5rem" }}>
+      <section className="hero">
+        <h1 className="page-title">求人検索</h1>
+        <p className="page-lead">キーワード・雇用形態・スキルで学習用求人を絞り込みます。</p>
+      </section>
+      <div className="card stack" style={{ marginBottom: "1.5rem" }}>
+        <form method="get" className="stack">
           <input type="hidden" name="user" value={session.sub} />
           <input type="hidden" name="role" value={session.role} />
           <label>
@@ -96,9 +99,12 @@ export default async function SearchPage({
           <label>
             年収上限 <input name="salaryMax" defaultValue={filters.salaryMax ?? ""} inputMode="numeric" />
           </label>
-          <button type="submit">検索</button>
+          <button type="submit" className="btn">
+            検索
+          </button>
         </form>
-        <form action={saveSearch} style={{ marginBottom: "1.5rem" }}>
+      </div>
+      <form action={saveSearch} className="card stack" style={{ marginBottom: "1.5rem" }}>
           <input type="hidden" name="user" value={session.sub} />
           <input type="hidden" name="role" value={session.role} />
           <input type="hidden" name="q" value={filters.q ?? ""} />
@@ -111,17 +117,19 @@ export default async function SearchPage({
             この条件を保存{" "}
             <input name="name" required placeholder="名前" />
           </label>{" "}
-          <button type="submit">保存検索にする</button>
+          <button type="submit" className="btn btn-secondary">
+            保存検索にする
+          </button>
         </form>
 
         {error ? (
-          <p role="alert" style={{ color: "#b00020" }}>
+          <p className="error" role="alert">
             {error}
           </p>
         ) : null}
 
-        <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: "1.5rem" }}>
-          <aside>
+        <div className="card-grid" style={{ gridTemplateColumns: "220px 1fr" }}>
+          <aside className="card">
             <h2>ファセット</h2>
             {facets ? (
               <>
@@ -161,25 +169,22 @@ export default async function SearchPage({
               <p>ファセットを取得できません。</p>
             )}
           </aside>
-          <section>
-            <h2>結果 {jobs.length} 件</h2>
-            {jobs.length === 0 && !error ? <p>該当する求人はありません。</p> : null}
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              {jobs.map((job) => (
-                <li key={job.id} style={{ borderBottom: "1px solid #eee", padding: "0.75rem 0" }}>
-                  <Link href={`/jobs/${job.id}${sessionQuery(session)}`}>
-                    <strong>{job.title}</strong>
-                  </Link>
-                  <div style={{ color: "#555", fontSize: "0.9rem" }}>
-                    {job.employmentType} · {job.remote ? "remote" : job.location || "office"} · {salaryLabel(job)}
-                  </div>
-                  <div style={{ fontSize: "0.85rem" }}>{job.skills.join(", ")}</div>
-                </li>
-              ))}
-            </ul>
+          <section className="card stack">
+            <h2 style={{ margin: 0 }}>結果 {jobs.length} 件</h2>
+            {jobs.length === 0 && !error ? <p className="muted">該当する求人はありません。</p> : null}
+            {jobs.map((job) => (
+              <div key={job.id} className="stack" style={{ paddingBottom: "0.75rem", borderBottom: "1px solid var(--border)" }}>
+                <Link href={`/jobs/${job.id}${sessionQuery(session)}`}>
+                  <strong>{job.title}</strong>
+                </Link>
+                <div className="muted">
+                  {job.employmentType} · {job.remote ? "remote" : job.location || "office"} · {salaryLabel(job)}
+                </div>
+                <div className="pill">{job.skills.join(", ")}</div>
+              </div>
+            ))}
           </section>
         </div>
-      </main>
     </AppShell>
   );
 }
