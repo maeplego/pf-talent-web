@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { saveProfile } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession } from "@/lib/session";
+import { loadTalentSession } from "@/lib/session";
 import type { CandidateProfile } from "@/lib/types";
 
 export default async function ProfilePage({
@@ -13,7 +13,7 @@ export default async function ProfilePage({
 }) {
   noStore();
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

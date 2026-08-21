@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { DevSession } from "../lib/session";
 import { sessionQuery } from "../lib/session";
 import { oidcEnabled } from "../lib/oidc/env";
+import { switchActiveOrg } from "../lib/org-actions";
+import { OrgSwitcher } from "./OrgSwitcher";
 
 export function AppShell({
   session,
@@ -11,6 +13,12 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   const q = sessionQuery(session);
+
+  async function onSwitch(orgId: string) {
+    "use server";
+    await switchActiveOrg(orgId, session.sub, session.role);
+  }
+
   return (
     <>
       <nav className="site-nav" style={{ marginBottom: "1rem" }}>
@@ -34,6 +42,11 @@ export function AppShell({
         <span>
           ユーザー <code>{session.sub}</code> / ロール <code>{session.role}</code>
         </span>
+        <OrgSwitcher
+          currentOrgId={session.orgId}
+          organizations={session.organizations}
+          onSwitch={onSwitch}
+        />
         <Link href={`/${sessionQuery({ sub: "candidate-1", role: "candidate" })}`}>candidate-1</Link>
         <Link href={`/${sessionQuery({ sub: "employer-1", role: "employer" })}`}>employer-1</Link>
         <Link href={`/${sessionQuery({ sub: "employer-2", role: "employer" })}`}>employer-2</Link>

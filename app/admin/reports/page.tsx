@@ -2,7 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession } from "@/lib/session";
+import { loadTalentSession } from "@/lib/session";
 import type { Report } from "@/lib/types";
 
 export default async function AdminReportsPage({
@@ -11,7 +11,7 @@ export default async function AdminReportsPage({
   searchParams: Promise<{ user?: string; role?: string }>;
 }) {
   noStore();
-  const session = parseDevSession(await searchParams);
+  const session = await loadTalentSession(await searchParams);
   if (!session) {
     return <LoginGate />;
   }

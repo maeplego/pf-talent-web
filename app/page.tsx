@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { saveSearch } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { buildJobsQuery, talentFetch } from "@/lib/api";
-import { parseDevSession, sessionQuery } from "@/lib/session";
+import { loadTalentSession, sessionQuery } from "@/lib/session";
 import type { Facets, Job } from "@/lib/types";
 
 function salaryLabel(job: Job): string {
@@ -32,7 +32,7 @@ export default async function SearchPage({
 }) {
   noStore();
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

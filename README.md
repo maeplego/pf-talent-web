@@ -18,14 +18,14 @@ copy .env.example .env
 docker compose up -d --build
 ```
 
-- Web: http://localhost:3010/?user=candidate-1
-- API: http://localhost:8090/health
+- Web: http://localhost:3011/?user=candidate-1
+- API: http://localhost:8091/health
 
 ホスト開発:
 
 ```powershell
 npm install
-$env:TALENT_API_URL="http://localhost:8090"
+$env:TALENT_API_URL="http://localhost:8091"
 npm run dev
 ```
 

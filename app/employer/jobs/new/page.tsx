@@ -2,7 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 
 import { createJob } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
-import { parseDevSession } from "@/lib/session";
+import { loadTalentSession } from "@/lib/session";
 
 export default async function NewJobPage({
   searchParams,
@@ -11,7 +11,7 @@ export default async function NewJobPage({
 }) {
   noStore();
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

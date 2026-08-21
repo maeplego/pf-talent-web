@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession, sessionQuery } from "@/lib/session";
+import { loadTalentSession, sessionQuery } from "@/lib/session";
 import type { Job } from "@/lib/types";
 
 export default async function EmployerJobsPage({
@@ -13,7 +13,7 @@ export default async function EmployerJobsPage({
 }) {
   noStore();
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

@@ -3,21 +3,21 @@
 import { redirect } from "next/navigation";
 
 import { talentFetch } from "@/lib/api";
-import { parseDevSession, sessionQuery } from "@/lib/session";
+import { loadTalentSession, sessionQuery, type DevSession } from "@/lib/session";
 
 function sessionFromForm(formData: FormData) {
-  return parseDevSession({
+  return loadTalentSession({
     user: String(formData.get("user") ?? ""),
     role: String(formData.get("role") ?? ""),
   });
 }
 
-function fail(path: string, session: NonNullable<ReturnType<typeof parseDevSession>>, error: string): never {
+function fail(path: string, session: DevSession, error: string): never {
   redirect(`${path}${sessionQuery(session, { error })}`);
 }
 
 export async function applyToJob(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const jobId = String(formData.get("jobId") ?? "");
   const resumeSnapshot = String(formData.get("resumeSnapshot") ?? "").trim();
@@ -32,7 +32,7 @@ export async function applyToJob(formData: FormData) {
 }
 
 export async function reportJob(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const jobId = String(formData.get("jobId") ?? "");
   const reason = String(formData.get("reason") ?? "").trim();
@@ -47,7 +47,7 @@ export async function reportJob(formData: FormData) {
 }
 
 export async function saveProfile(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const skills = String(formData.get("skills") ?? "")
     .split(",")
@@ -73,7 +73,7 @@ export async function saveProfile(formData: FormData) {
 }
 
 export async function createJob(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const salaryMinRaw = String(formData.get("salaryMin") ?? "").trim();
   const salaryMaxRaw = String(formData.get("salaryMax") ?? "").trim();
@@ -103,7 +103,7 @@ export async function createJob(formData: FormData) {
 }
 
 export async function patchApplicationStatus(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const jobId = String(formData.get("jobId") ?? "");
   const applicationId = String(formData.get("applicationId") ?? "");
@@ -119,7 +119,7 @@ export async function patchApplicationStatus(formData: FormData) {
 }
 
 export async function saveSearch(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const skills = String(formData.get("skills") ?? "")
     .split(",")
@@ -149,7 +149,7 @@ export async function saveSearch(formData: FormData) {
 }
 
 export async function runSavedSearch(formData: FormData) {
-  const session = sessionFromForm(formData);
+  const session = await sessionFromForm(formData);
   if (!session) redirect("/");
   const id = String(formData.get("savedSearchId") ?? "");
   const result = await talentFetch<{ matchedCount: number }>(`/v1/saved-searches/${id}/run`, session, {

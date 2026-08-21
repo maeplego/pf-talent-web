@@ -5,7 +5,7 @@ import { patchApplicationStatus } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { InterviewSlots } from "@/components/InterviewSlots";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession, sessionQuery } from "@/lib/session";
+import { loadTalentSession, sessionQuery } from "@/lib/session";
 import type { Application, Job } from "@/lib/types";
 
 const NEXT_STATUSES = ["applied", "document_passed", "interview", "offered", "rejected"] as const;
@@ -20,7 +20,7 @@ export default async function ApplicantListPage({
   noStore();
   const { id } = await params;
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

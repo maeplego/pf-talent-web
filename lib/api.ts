@@ -12,7 +12,7 @@ export class TalentApiError extends Error {
 }
 
 export function talentApiBase(): string {
-  return (process.env.TALENT_API_URL ?? "http://localhost:8090").replace(/\/$/, "");
+  return (process.env.TALENT_API_URL ?? "http://localhost:8091").replace(/\/$/, "");
 }
 
 export type TalentResult<T> = { ok: true; data: T } | { ok: false; error: string; status: number };
@@ -23,6 +23,9 @@ export async function talentFetch<T>(path: string, session: DevSession, init?: R
       "Content-Type": "application/json",
       "X-Dev-User-Sub": session.sub,
     };
+    if (session.orgId) {
+      headers["X-Dev-User-Org"] = session.orgId;
+    }
     if (oidcEnabled()) {
       const access = await readCookie("rp_access");
       if (access) {

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { buildJobsQuery, talentFetch } from "./api";
 
-const session = { sub: "candidate-1", role: "candidate" as const };
+const session = { sub: "candidate-1", role: "candidate" as const, orgId: "org-demo-a", organizations: [], devMode: true };
 
 describe("buildJobsQuery", () => {
   it("omits empty filters", () => {
@@ -36,5 +36,6 @@ describe("talentFetch", () => {
     const result = await talentFetch("/v1/jobs", session);
     expect(result.ok).toBe(true);
     expect(fetchMock.mock.calls[0][1].headers["X-Dev-User-Sub"]).toBe("candidate-1");
+    expect(fetchMock.mock.calls[0][1].headers["X-Dev-User-Org"]).toBe("org-demo-a");
   });
 });

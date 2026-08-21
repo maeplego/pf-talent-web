@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { applyToJob, reportJob } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession, sessionQuery } from "@/lib/session";
+import { loadTalentSession, sessionQuery } from "@/lib/session";
 import type { Job, SimilarJobs } from "@/lib/types";
 
 function salaryLabel(job: Job): string {
@@ -27,7 +27,7 @@ export default async function JobDetailPage({
   noStore();
   const { id } = await params;
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }

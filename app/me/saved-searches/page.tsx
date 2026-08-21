@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { runSavedSearch, saveSearch } from "@/app/actions";
 import { AppShell, LoginGate } from "@/components/AppShell";
 import { talentFetch } from "@/lib/api";
-import { parseDevSession } from "@/lib/session";
+import { loadTalentSession } from "@/lib/session";
 import type { SavedSearch } from "@/lib/types";
 
 export default async function SavedSearchesPage({
@@ -24,7 +24,7 @@ export default async function SavedSearchesPage({
 }) {
   noStore();
   const sp = await searchParams;
-  const session = parseDevSession(sp);
+  const session = await loadTalentSession(sp);
   if (!session) {
     return <LoginGate />;
   }
